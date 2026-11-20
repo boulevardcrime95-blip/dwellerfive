@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f6f2">
+    <title>Idéverkstan — e-handelsassistent</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Idéverkstan, startsida">
+        <span class="brand-mark" aria-hidden="true">i</span>
+        <span>idéverkstan</span>
+      </a>
+      <span class="header-note">Din lugna plats för nästa produktidé</span>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow">FRÅN TANKE TILL TEST</p>
+          <h1 id="page-title">En bra idé börjar<br>med en enkel kalkyl.</h1>
+          <p class="intro-description">Samla produktidéer, jämför kostnader och gör din egen checklista innan du tar nästa steg.</p>
+        </div>
+        <div class="intro-art" aria-hidden="true">
+          <span class="art-sun"></span>
+          <span class="art-leaf leaf-one"></span>
+          <span class="art-leaf leaf-two"></span>
+          <span class="art-pot"></span>
+          <span class="art-spark">✳</span>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Produktidéer">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">DIN ARBETSSTUDIO</p>
+            <h2>Produktidéer</h2>
+          </div>
+          <span id="idea-count" class="idea-count">0 idéer</span>
+        </div>
+
+        <div class="workspace-grid">
+          <form id="idea-form" class="idea-form">
+            <div class="form-heading">
+              <span class="form-icon" aria-hidden="true">＋</span>
+              <div>
+                <h3>Lägg till en idé</h3>
+                <p>Börja enkelt. Du kan ändra dig senare.</p>
+              </div>
+            </div>
+
+            <label for="idea-name">Produktidé <span aria-hidden="true">*</span></label>
+            <input id="idea-name" name="name" type="text" maxlength="100" placeholder="Ex. Återanvändbar kaffefilterhållare" required>
+
+            <label for="supplier-url">Leverantörslänk <span class="optional">(valfritt)</span></label>
+            <input id="supplier-url" name="supplierUrl" type="url" inputmode="url" placeholder="https://...">
+
+            <div class="form-divider"><span>KALKYL I KRONOR</span></div>
+            <div class="field-grid">
+              <div>
+                <label for="purchase-cost">Inköpspris</label>
+                <div class="number-input"><input id="purchase-cost" name="purchaseCost" type="number" min="0" step="0.01" value="0" required><span>kr</span></div>
+              </div>
+              <div>
+                <label for="shipping-cost">Frakt per produkt</label>
+                <div class="number-input"><input id="shipping-cost" name="shippingCost" type="number" min="0" step="0.01" value="0" required><span>kr</span></div>
+              </div>
+              <div>
+                <label for="sale-price">Tänkt försäljningspris</label>
+                <div class="number-input"><input id="sale-price" name="salePrice" type="number" min="0.01" step="0.01" placeholder="0,00" required><span>kr</span></div>
+              </div>
+              <div>
+                <label for="fee-rate">Avgifter</label>
+                <div class="number-input"><input id="fee-rate" name="feeRate" type="number" min="0" max="100" step="0.1" value="0" required><span>%</span></div>
+              </div>
+            </div>
+            <p class="field-hint">Procentuell avgift, till exempel betalnings- eller plattformsavgift.</p>
+
+            <label for="idea-notes">Anteckningar <span class="optional">(valfritt)</span></label>
+            <textarea id="idea-notes" name="notes" rows="3" maxlength="1000" placeholder="Vad gör idén intressant? Vad vill du ta reda på?"></textarea>
+
+            <button class="button button-primary add-button" type="submit">Spara produktidé <span aria-hidden="true">↗</span></button>
+            <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="ideas-column">
+            <div id="empty-state" class="empty-state">
+              <span class="empty-icon" aria-hidden="true">✳</span>
+              <h3>Din första idé får plats här</h3>
+              <p>Lägg till en produkt till vänster för att se kalkyl, leverantörslänk och egen checklista samlade.</p>
+            </div>
+            <div id="idea-list" class="idea-list" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <p id="storage-message" class="storage-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="prompt-panel" class="prompt-panel" hidden aria-labelledby="prompt-title">
+        <div class="prompt-heading">
+          <div>
+            <p class="eyebrow">AI-HJÄLP, PÅ DINA VILLKOR</p>
+            <h2 id="prompt-title">Ditt promptutkast</h2>
+          </div>
+          <button id="close-prompt" class="icon-button" type="button" aria-label="Stäng promptutkast">×</button>
+        </div>
+        <p>Det här är ett utkast att kopiera till ett AI-verktyg om du vill. Inget skickas eller analyseras automatiskt.</p>
+        <label class="visually-hidden" for="prompt-text">Skapat promptutkast</label>
+        <textarea id="prompt-text" rows="10" readonly></textarea>
+        <button id="copy-prompt" class="button button-secondary" type="button">Kopiera prompt</button>
+        <span id="prompt-message" class="prompt-message" role="status" aria-live="polite"></span>
+      </section>
+
+      <aside class="notice" aria-label="Viktig information">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <p><strong>En uppskattning, inte ett löfte.</strong> Kalkylen är förenklad och tar inte hänsyn till alla skatter, returer eller andra kostnader. En positiv marginal garanterar inte försäljning eller intäkter. Du granskar, kontrollerar och godkänner själv varje steg.</p>
+      </aside>
+    </main>
+
+    <footer><span>Idéverkstan</span><span>Byggd för att tänka efter före.</span></footer>
+  </body>
+</html>
